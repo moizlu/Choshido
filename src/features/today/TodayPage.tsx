@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../../app/storeContext'
-import { badgesFor, checklistProgress } from '../../app/selectors'
+import { badgesFor } from '../../app/selectors'
 import { Button } from '../../components/Button'
 import { PageHeader } from '../../components/PageHeader'
 import { Stamp } from '../../components/Stamp'
@@ -26,9 +26,7 @@ export function TodayPage() {
   const dayPoints = pointsOnDate(data.points, selectedDate)
   const todayLog = data.logs[selectedDate]
   const advice = buildAdvice(data, selectedDate)
-  const checklist = checklistProgress(data)
   const badges = badgesFor(data, selectedDate)
-  const lastWalk = [...data.walks].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]
 
   const handleDateChange = (value: string) => {
     if (!value || value > activeDate) return
