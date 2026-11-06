@@ -20,8 +20,52 @@
 - 自作SVG（グラフ・防災マップ・アイコン）
 - Vitest + Testing Library
 - Cloudflare Pages（静的アセットのみ）
+- Docker + nginx（任意のローカル配信）
+
+
+## ダウンロード
+### Gitが使える場合
+```bash
+git clone https://github.com/moizlu/Choshido.git
+cd Choshido
+```
+## 直にダウンロードする場合
+1. リポジトリトップページの右上にある｢Code(緑背景)｣ボタンをクリックし、一番下の｢Download ZIP｣をクリック
+2. ZIPファイルを展開して好きなところに配置
+3. ターミナルの作業ディレクトリをそこに設定
+   - 例: ダウンロードフォルダに置いた場合は`C\:Users\[username]\Downloads\Choshido`
 
 ## 起動
+### Dockerを使う場合
+#### 開発サーバー(普段はこっち)
+
+```bash
+docker compose --profile dev up dev
+```
+
+`http://localhost:5173` を開きます。ホットリロードが有効です。
+
+依存関係を更新したときは、イメージを作り直してください。開発用コンテナは `package.json` と `pnpm-lock.yaml` をイメージ内から読み込みます。
+
+#### 本番ビルド(nginx)
+
+```bash
+docker compose up --build
+```
+
+`http://localhost:8080` を開きます。`dist/` を nginx で配信し、`public/_headers` 相当のCSP・キャッシュ・セキュリティヘッダーは `nginx.conf` で付与します。
+
+#### 検証用ビルド
+
+```bash
+docker build --target check .
+```
+
+`typecheck` / `lint` / `test` をコンテナ内で実行します。
+
+`localStorage` はオリジン単位のため、`localhost:5173` と `localhost:8080` の記録データは共有されません。データを移す場合は設定画面のJSON書き出し／読み込みを使ってください。
+
+### 直接起動する場合
 ```bash
 pnpm install
 pnpm dev
@@ -40,32 +84,8 @@ pnpm build          # 本番ビルド（dist/）
 pnpm preview        # ビルド結果の確認
 pnpm run deploy     # Cloudflare Pagesへデプロイ
 ```
-
-## Cloudflare Pagesへのデプロイ
-
-静的ファイルのみを配信します。WorkersのランタイムコードやPages Functionsは使いません。
-
-### Wranglerで直接デプロイ
-
-```bash
-pnpm build
-pnpm exec wrangler login
-pnpm run deploy
-```
-
-`pnpm run deploy` は `wrangler pages deploy dist --project-name choshido` を実行します。`pnpm deploy` は pnpm の組み込みコマンドと衝突するため、必ず `pnpm run deploy` を使ってください。プロジェクト名を変える場合は `package.json` の `deploy` を編集してください。初回はCloudflareアカウントへのログインが必要です。
-
-### Git連携
-
-Cloudflare Dashboard → Pages → Connect to Git でリポジトリを接続し、以下を設定します。
-
-- Build command: `pnpm run build`
-- Build output directory: `dist`
-
-`public/_headers` が `dist/_headers` にコピーされ、CSP・キャッシュ・セキュリティヘッダーが適用されます。HashRouterを使っているため `_redirects` は不要です。
-
 ## データの保存
-
+全て`localStorage`内に保存されます。
 - 通常データ: `choshido:v1:real`
 - シミュレーション: `choshido:v1:sim`
 - 破損データの退避: `choshido:corrupt:<timestamp>`

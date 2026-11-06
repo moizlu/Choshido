@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+coverage
+.vite
+.wrangler
+*.tsbuildinfo
+*.log
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+Thumbs.db
