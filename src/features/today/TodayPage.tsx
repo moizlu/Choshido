@@ -1,25 +1,39 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../../app/storeContext'
 import { badgesFor, checklistProgress } from '../../app/selectors'
+import { Button } from '../../components/Button'
 import { PageHeader } from '../../components/PageHeader'
 import { Stamp } from '../../components/Stamp'
 import { useToast } from '../../components/toastContext'
 import { buildAdvice } from '../../domain/advice'
-import { formatDateJa } from '../../domain/date'
-import { STREAK_MILESTONES } from '../../domain/points'
+import { addDays, formatDateJa } from '../../domain/date'
+import { metricsFor } from '../../domain/metrics'
+import { pointsOnDate, STREAK_MILESTONES } from '../../domain/points'
+import { streakLength } from '../../domain/streak'
 import { AdviceList } from './AdviceList'
 import { LogForm } from './LogForm'
 
 export function TodayPage() {
   const store = useStore()
   const { showToast } = useToast()
-  const { data, date, metrics, streak, total, level, todayPoints } = store
+  const { data, date: activeDate, total, level } = store
+  const [selectedDate, setSelectedDate] = useState(activeDate)
 
-  const todayLog = data.logs[date]
-  const advice = buildAdvice(data, date)
+  const isLatest = selectedDate === activeDate
+  const metrics = metricsFor(data, selectedDate)
+  const streak = streakLength(data.logs, selectedDate)
+  const dayPoints = pointsOnDate(data.points, selectedDate)
+  const todayLog = data.logs[selectedDate]
+  const advice = buildAdvice(data, selectedDate)
   const checklist = checklistProgress(data)
-  const badges = badgesFor(data, date)
+  const badges = badgesFor(data, selectedDate)
   const lastWalk = [...data.walks].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]
+
+  const handleDateChange = (value: string) => {
+    if (!value || value > activeDate) return
+    setSelectedDate(value)
+  }
 
   const profileNeedsHeight = !data.profile.heightCm || !data.profile.birthYear
   const profileNeedsSex = data.profile.sex === 'unspecified'
@@ -35,18 +49,58 @@ export function TodayPage() {
   }
 
   const handleDelete = () => {
-    store.deleteLog(date)
+    store.deleteLog(selectedDate)
     showToast('記録を削除しました')
   }
 
   return (
     <>
       <PageHeader
-        eyebrow={`記録 / ${formatDateJa(date)}`}
-        title="今日の記録"
+        eyebrow={`記録 / ${formatDateJa(selectedDate)}`}
+        title={isLatest ? '今日の記録' : 'この日の記録'}
         description="体重・睡眠・運動・体調を残します。入力はどれか1つでも構いません。"
-        actions={todayLog ? <Stamp>記録済み</Stamp> : <Stamp tone="muted">未記録</Stamp>}
+        actions={
+          <div className="today-actions">
+            {todayLog ? <Stamp>記録済み</Stamp> : <Stamp tone="muted">未記録</Stamp>}
+            {!isLatest ? (
+              <Button size="sm" variant="ghost" onClick={() => setSelectedDate(activeDate)}>
+                最新の日へ
+              </Button>
+            ) : null}
+          </div>
+        }
       />
+
+      <div className="date-nav" role="group" aria-label="記録する日を選ぶ">
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => setSelectedDate(addDays(selectedDate, -1))}
+        >
+          前日
+        </Button>
+        <div className="input-shell date-nav-input">
+          <input
+            type="date"
+            className="input"
+            value={selectedDate}
+            max={activeDate}
+            aria-label="記録する日"
+            onChange={(event) => handleDateChange(event.target.value)}
+          />
+        </div>
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={isLatest}
+          onClick={() => setSelectedDate(addDays(selectedDate, 1))}
+        >
+          翌日
+        </Button>
+        <span className="field-hint date-nav-hint">
+          過去の日付を選ぶと、その日の記録を追加・編集できます。
+        </span>
+      </div>
 
       <div className="summary-grid">
         <div className="summary-card">
@@ -79,7 +133,7 @@ export function TodayPage() {
             {streak}
             <small>日</small>
           </p>
-          <p className="summary-sub">今日または昨日まで</p>
+          <p className="summary-sub">{isLatest ? '今日または昨日まで' : 'この日まで'}</p>
         </div>
         <div className="summary-card">
           <p className="summary-label">段位</p>
@@ -107,13 +161,13 @@ export function TodayPage() {
           <section className="card" aria-labelledby="today-log-title">
             <div className="card-header">
               <h2 className="card-title" id="today-log-title">
-                今日の入力
+                {isLatest ? '今日の入力' : 'この日の入力'}
               </h2>
               <span className="card-label">1日1回 +10点</span>
             </div>
             <LogForm
-              key={`${date}-${todayLog?.updatedAt ?? 'new'}`}
-              date={date}
+              key={`${selectedDate}-${todayLog?.updatedAt ?? 'new'}`}
+              date={selectedDate}
               initial={todayLog}
               onSubmit={handleSave}
               onDelete={todayLog ? handleDelete : undefined}
@@ -128,9 +182,6 @@ export function TodayPage() {
               <span className="card-label">直近の記録から</span>
             </div>
             <AdviceList advice={advice} />
-            <p className="footer-note">
-              一般的な生活習慣の目安です。医療上の診断や助言ではありません。
-            </p>
           </section>
         </div>
 
@@ -140,7 +191,9 @@ export function TodayPage() {
               <h2 className="card-title" id="today-points-title">
                 ポイント
               </h2>
-              <Stamp tone="muted">今日 +{todayPoints}</Stamp>
+              <Stamp tone="muted">
+                {isLatest ? '今日' : 'この日'} +{dayPoints}
+              </Stamp>
             </div>
             <p className="card-label">累計</p>
             <p className="point-total">
@@ -172,7 +225,7 @@ export function TodayPage() {
             </div>
           </section>
 
-          <section className="card" aria-labelledby="today-disaster-title">
+          {/* <section className="card" aria-labelledby="today-disaster-title">
             <div className="card-header">
               <h2 className="card-title" id="today-disaster-title">
                 防災の備え
@@ -192,17 +245,17 @@ export function TodayPage() {
             <p className="card-note mt-2">
               {lastWalk
                 ? `最終訓練 ${formatDateJa(lastWalk.date)} / 避難所${lastWalk.destinationId} / +${lastWalk.points}点`
-                : 'まだ防災さんぽの訓練がありません。'}
+                : 'まだ散歩の記録がありません。'}
             </p>
             <div className="form-actions">
               <Link to="/map" className="btn btn-primary">
-                防災さんぽへ
+                散歩へ
               </Link>
               <Link to="/map" className="btn btn-ghost">
                 備えを確認
               </Link>
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </>

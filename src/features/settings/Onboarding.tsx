@@ -11,7 +11,6 @@ export function Onboarding() {
         <div className="onboarding-brand">
           <div>
             <h1 className="onboarding-title">調知堂</h1>
-            <p className="onboarding-lead">からだの記録と、防災の備え。</p>
           </div>
           <Stamp tone="muted">はじめに</Stamp>
         </div>
@@ -27,9 +26,6 @@ export function Onboarding() {
           </div>
           <div className="notice">
             <strong>防災</strong> 架空の街で避難所までの経路を確認する訓練です。
-          </div>
-          <div className="notice">
-            <strong>目安</strong> 医療上の診断や助言ではありません。
           </div>
         </div>
 

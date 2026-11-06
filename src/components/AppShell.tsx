@@ -8,7 +8,7 @@ import { useToast } from './toastContext'
 const NAV_ITEMS = [
   { to: '/', label: '今日', icon: IconToday, end: true },
   { to: '/history', label: '記録', icon: IconHistory, end: false },
-  { to: '/map', label: '防災', icon: IconMap, end: false },
+  { to: '/map', label: '散歩', icon: IconMap, end: false },
   { to: '/settings', label: '設定', icon: IconSettings, end: false },
 ]
 
@@ -68,6 +68,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             <IconClose width={14} height={14} />
             終了
           </button>
+          <p className="sim-banner-guide">
+            「1日進める」で日付を進めながら、各タブを見て回れます。
+          </p>
         </div>
       ) : null}
 
@@ -75,7 +78,6 @@ export function AppShell({ children }: { children: ReactNode }) {
         <aside className="side-rail" aria-label="サイドバー">
           <div className="rail-brand">
             <span className="wordmark">調知堂</span>
-            <p>からだの記録と、防災の備え。</p>
           </div>
           <nav className="rail-nav" aria-label="主要な画面">
             {NAV_ITEMS.map((item) => (
@@ -93,7 +95,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             ) : (
               <span>ブラウザ内に保存</span>
             )}
-            <span>医療上の助言ではありません</span>
           </div>
         </aside>
 

@@ -110,8 +110,8 @@ export function buildAdvice(data: AppData, activeDate: string, now = new Date())
       id: 'training',
       tone: 'notice',
       title: '防災訓練',
-      body: '防災さんぽの訓練が14日間ありません。避難所までの経路を確認しましょう。',
-      evidence: '散歩訓練 14日間なし',
+      body: '散歩の訓練が14日間ありません。避難所までの経路を確認しましょう。',
+      evidence: '散歩 14日間なし',
     })
   }
 
@@ -120,8 +120,8 @@ export function buildAdvice(data: AppData, activeDate: string, now = new Date())
     advice.push({
       id: 'insufficient',
       tone: 'steady',
-      title: 'データをためる',
-      body: '3日分の記録がたまると、傾向に応じた提案が出ます。',
+      title: 'データを貯める',
+      body: '3日分の記録が貯まると、傾向に応じた提案が出ます。',
       evidence: `記録 ${logCount}日 / 3日`,
     })
   }

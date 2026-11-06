@@ -73,7 +73,7 @@ export function recordWalkInData(
         date: input.date,
         amount: points,
         source: 'walk',
-        label: `防災さんぽ ${input.destinationId}`,
+        label: `散歩 ${input.destinationId}`,
         createdAt,
       }),
     ]

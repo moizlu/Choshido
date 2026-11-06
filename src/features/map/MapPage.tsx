@@ -5,7 +5,7 @@ import { Button } from '../../components/Button'
 import { PageHeader } from '../../components/PageHeader'
 import { Stamp } from '../../components/Stamp'
 import { useToast } from '../../components/toastContext'
-import { IconAlert, IconCheck, IconClose, IconWalk } from '../../components/icons'
+import { IconCheck, IconClose, IconWalk } from '../../components/icons'
 import { CHECKLIST_ITEMS } from '../../domain/checklist'
 import { formatDateJa } from '../../domain/date'
 import type { ShelterId } from '../../domain/types'
@@ -153,18 +153,11 @@ export function MapPage() {
   return (
     <>
       <PageHeader
-        eyebrow="防災 / 訓練"
-        title="防災さんぽ"
-        description="架空の街で避難所までの経路を選び、危険区域を避けて歩く訓練です。"
+        eyebrow="散歩 / 防災"
+        title="散歩"
+        description="避難所まで歩き、運動と経路の確認を行います。"
         actions={<Stamp tone="caution">訓練</Stamp>}
       />
-
-      <div className="notice notice-warning mb-4">
-        <div className="flex items-start gap-2">
-          <IconAlert width={16} height={16} className="mt-0.5 shrink-0" />
-          <p>この地図はデモ用の架空の街です。実際の避難経路・ハザード情報ではありません。</p>
-        </div>
-      </div>
 
       <div className="grid-dashboard">
         <div className="stack">
@@ -425,9 +418,7 @@ export function MapPage() {
 
           <section className="card">
             <h2 className="card-title">訓練の前提</h2>
-            <p className="card-note mt-2">
-              自宅はマップ南西の位置にあります。マップ・避難所・危険区域はすべてデモ用に作成したもので、実際の神戸市のハザードマップとは関係ありません。
-            </p>
+            <p className="card-note mt-2">自宅はマップ南西の位置にあります。</p>
           </section>
         </div>
       </div>
@@ -457,10 +448,6 @@ export function MapPage() {
           <div className="empty">まだ訓練の記録がありません。</div>
         )}
       </section>
-
-      <p className="footer-note">
-        防災さんぽは訓練用のシミュレーションです。実際に避難するときは、自治体の最新情報と現地の状況に従ってください。
-      </p>
     </>
   )
 }

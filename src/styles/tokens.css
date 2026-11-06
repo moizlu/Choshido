@@ -5,6 +5,7 @@
   --color-ink: oklch(24% 0.018 65);
   --color-ink-muted: oklch(46% 0.016 65);
   --color-ink-faint: oklch(48% 0.012 65);
+  --color-ink-ghost: oklch(68% 0.009 65);
   --color-rule: oklch(85% 0.012 85);
   --color-rule-strong: oklch(74% 0.015 85);
   --color-accent: oklch(42% 0.075 155);

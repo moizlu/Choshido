@@ -17,7 +17,7 @@ function ScrollToTop() {
 }
 
 export default function App() {
-  const { mode, real } = useStore()
+  const { mode, real, date } = useStore()
 
   if (mode === 'real' && !real.onboardingDone) {
     return <Onboarding />
@@ -28,7 +28,7 @@ export default function App() {
       <ScrollToTop />
       <AppShell>
         <Routes>
-          <Route path="/" element={<TodayPage />} />
+          <Route path="/" element={<TodayPage key={`${mode}:${date}`} />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/settings" element={<SettingsPage />} />

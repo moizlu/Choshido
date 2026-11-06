@@ -38,7 +38,7 @@ export function HistoryPage() {
       <PageHeader
         eyebrow={`記録 / 直近${range}日`}
         title="記録の台帳"
-        description="日ごとの記録と推移を確認します。行を開くと過去の記録を編集できます。"
+        description="日ごとの記録と推移を確認します。行を開くと過去の記録を追加・編集できます。"
         actions={
           <div className="settings-row" role="group" aria-label="表示期間">
             <Button
@@ -106,7 +106,14 @@ export function HistoryPage() {
                         {isEditing ? '閉じる' : '編集'}
                       </Button>
                     ) : (
-                      <span className="card-label ledger-empty">記録なし</span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        aria-expanded={isEditing}
+                        onClick={() => setEditing(isEditing ? null : dayKey)}
+                      >
+                        {isEditing ? '閉じる' : '記録する'}
+                      </Button>
                     )}
                   </div>
                   <div className="ledger-metrics">
@@ -134,14 +141,14 @@ export function HistoryPage() {
                   </div>
                 </div>
 
-                {log && isEditing ? (
+                {isEditing ? (
                   <div className="pb-3">
                     <LogForm
-                      key={`${dayKey}-${log.updatedAt}`}
+                      key={`${dayKey}-${log?.updatedAt ?? 'new'}`}
                       date={dayKey}
                       initial={log}
                       onSubmit={handleSave}
-                      onDelete={() => handleDelete(dayKey)}
+                      onDelete={log ? () => handleDelete(dayKey) : undefined}
                     />
                   </div>
                 ) : null}

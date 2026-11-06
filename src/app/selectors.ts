@@ -68,7 +68,7 @@ export function badgesFor(data: AppData, date: string): Badge[] {
     {
       id: 'first-walk',
       label: '初散歩',
-      hint: '防災さんぽを1回完了',
+      hint: '散歩を1回完了',
       earned: data.walks.length > 0,
     },
     {

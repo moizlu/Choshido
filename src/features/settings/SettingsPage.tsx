@@ -25,7 +25,7 @@ export function SettingsPage() {
       return
     }
     store.startSim()
-    showToast('シミュレーションを開始しました')
+    showToast('開始しました。「1日進める」で日付を進めながら、各タブを見て回ってください。')
   }
 
   const handleAdvance = () => {
@@ -112,11 +112,15 @@ export function SettingsPage() {
             <h2 className="card-title" id="sim-settings-title">
               シミュレーション
             </h2>
-            <span className="card-label">デモ再生</span>
+            <span className="card-label">サンプル再生</span>
           </div>
 
           {mode === 'sim' && sim ? (
             <div className="stack-sm">
+              <div className="notice notice-accent">
+                <strong>進め方</strong>{' '}
+                「1日進める」で日付を進めながら、各タブを見て回ってください。今日・記録・散歩の内容が日ごとに変わります。
+              </div>
               <p className="card-note">
                 現在 <span className="num">{formatDateJa(sim.currentDate)}</span> / パターン{' '}
                 <span className="num">{sim.seed}</span>
@@ -256,10 +260,6 @@ export function SettingsPage() {
           <ul className="stack-sm card-note">
             <li>健康データは手入力です。HealthKit・Google Fitなどとの連携はありません。</li>
             <li>データはこのブラウザ内にだけ保存され、外部に送信されません。</li>
-            <li>
-              表示されるBMI・基礎代謝・助言は一般的な目安で、医療上の診断や助言ではありません。
-            </li>
-            <li>防災マップはデモ用の架空の街です。実際の避難経路・ハザード情報ではありません。</li>
             <li>ブラウザのデータ消去や端末の変更に備え、JSONの書き出しを利用してください。</li>
           </ul>
         </section>
