@@ -1,0 +1,30 @@
+:root {
+  --color-paper: oklch(97.2% 0.011 85);
+  --color-paper-raised: oklch(99% 0.006 85);
+  --color-paper-sunken: oklch(94.5% 0.013 85);
+  --color-ink: oklch(24% 0.018 65);
+  --color-ink-muted: oklch(46% 0.016 65);
+  --color-ink-faint: oklch(48% 0.012 65);
+  --color-rule: oklch(85% 0.012 85);
+  --color-rule-strong: oklch(74% 0.015 85);
+  --color-accent: oklch(42% 0.075 155);
+  --color-accent-strong: oklch(35% 0.075 155);
+  --color-accent-soft: oklch(93% 0.03 155);
+  --color-caution: oklch(48% 0.15 35);
+  --color-caution-strong: oklch(40% 0.15 35);
+  --color-caution-soft: oklch(94% 0.04 35);
+  --color-water: oklch(89% 0.035 225);
+  --color-water-deep: oklch(80% 0.045 225);
+  --color-park: oklch(90% 0.045 145);
+  --color-condition-1: oklch(93% 0.018 155);
+  --color-condition-2: oklch(89% 0.032 155);
+  --color-condition-3: oklch(82% 0.052 155);
+  --color-condition-4: oklch(68% 0.06 155);
+  --color-condition-5: oklch(42% 0.075 155);
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --font-body:
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', 'Noto Sans JP', 'BIZ UDPGothic',
+    system-ui, sans-serif;
+  --font-num: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
